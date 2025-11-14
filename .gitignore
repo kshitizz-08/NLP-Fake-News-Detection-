@@ -40,6 +40,8 @@ ENV/
 instance/
 
 # Model files (if too large, consider using Git LFS)
+# Allow model files in backend directory (required for app)
+!backend/*.pkl
 *.pkl
 *.h5
 *.model

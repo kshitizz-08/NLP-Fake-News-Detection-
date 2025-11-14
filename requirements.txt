@@ -14,6 +14,7 @@ flask-cors
 flask-sqlalchemy
 flask-login
 werkzeug
+PyJWT
 
 # Data Processing
 beautifulsoup4
@@ -24,6 +25,9 @@ joblib
 
 # Additional ML Libraries
 scipy
+
+# Database (for production - PostgreSQL)
+psycopg2-binary
 
 # Development and Testing
 pytest
