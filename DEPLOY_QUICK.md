@@ -22,7 +22,7 @@ git push origin main
    - **Name**: `fake-news-detection` (or your choice)
    - **Environment**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `cd backend && gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 app:app`
+   - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 wsgi:app`
 
 5. **Click "Advanced" → Add Environment Variables:**
    ```

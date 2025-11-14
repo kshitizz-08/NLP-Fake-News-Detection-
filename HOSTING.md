@@ -31,7 +31,7 @@ Render is a modern platform that's easy to use and offers a free tier.
    - **Name**: `fake-news-detection` (or your choice)
    - **Environment**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `cd backend && gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 app:app`
+   - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 wsgi:app`
    - **Instance Type**: Free (or paid for better performance)
 
 4. **Set Environment Variables:**
@@ -77,9 +77,9 @@ Railway offers a generous free tier with no sleep time.
 
 3. **Configure Deployment:**
    - Railway auto-detects Python projects
-   - It will use your `Procfile` automatically
+   - It will use your `Procfile` automatically (which uses `wsgi:app`)
    - If not detected, set:
-     - **Start Command**: `cd backend && gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 app:app`
+     - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120 wsgi:app`
 
 4. **Set Environment Variables:**
    Go to "Variables" tab:
