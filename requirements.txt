@@ -14,6 +14,7 @@ flask-cors
 flask-sqlalchemy
 flask-login
 werkzeug
+PyJWT
 
 # Data Processing
 beautifulsoup4
