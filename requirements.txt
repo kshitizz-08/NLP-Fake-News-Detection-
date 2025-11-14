@@ -27,3 +27,6 @@ scipy
 
 # Development and Testing
 pytest
+
+# Production Server
+gunicorn

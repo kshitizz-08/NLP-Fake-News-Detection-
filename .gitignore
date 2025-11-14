@@ -26,19 +26,22 @@ env/
 ENV/
 .venv
 
-# Flask
-instance/
-.webassets-cache
+# Database
 *.db
 *.sqlite
 *.sqlite3
+instance/
+backend/instance/
+users.db
 
-# Machine Learning Models (large files - consider Git LFS)
-*.pkl
-*.h5
-*.hdf5
-*.joblib
-*.model
+# Flask
+instance/
+.webassets-cache
+
+# Environment variables
+.env
+.env.local
+.env.*.local
 
 # IDE
 .vscode/
@@ -46,32 +49,34 @@ instance/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
+Thumbs.db
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb
-
-# Environment variables
-.env
-.env.local
-.env.*.local
+# Model files (if too large, uncomment)
+# *.pkl
+# *.h5
+# *.model
 
 # Logs
 *.log
 logs/
 
-# OS
-Thumbs.db
-.DS_Store
+# Temporary files
+*.tmp
+*.temp
 
-# Project specific
-backend/instance/
-instance/
-*.db
-backend/metrics.json
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Keep data directory structure but ignore large CSV files if needed
-# Uncomment if data files are too large:
-# data/*.csv
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 

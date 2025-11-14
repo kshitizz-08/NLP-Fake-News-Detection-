@@ -26,32 +26,44 @@ except Exception:  # Optional at runtime if user doesn't pass URLs
     BeautifulSoup = None
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-change-this-in-production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+
+# Configuration from environment variables (for production) or defaults (for development)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # JWT Configuration
-app.config['JWT_SECRET_KEY'] = 'your-jwt-secret-key-change-this-in-production'
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-jwt-secret-key-change-this-in-production')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)  # 30 days
 
 # Extended session configuration to prevent premature expiration
 app.config['PERMANENT_SESSION_LIFETIME'] = 86400 * 7  # 7 days in seconds
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+# Use secure cookies in production (HTTPS required)
+is_production = os.environ.get('FLASK_ENV') == 'production' or os.environ.get('ENVIRONMENT') == 'production'
+app.config['SESSION_COOKIE_SECURE'] = is_production  # Set to True in production with HTTPS
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_MAX_AGE'] = 86400 * 7  # 7 days in seconds
 app.config['REMEMBER_COOKIE_DURATION'] = 86400 * 7  # 7 days in seconds
-app.config['REMEMBER_COOKIE_SECURE'] = False
+app.config['REMEMBER_COOKIE_SECURE'] = is_production
 app.config['REMEMBER_COOKIE_HTTPONLY'] = True
 app.config['REMEMBER_COOKIE_REFRESH_EACH_REQUEST'] = True
 
-# Allow frontend origins in development
+# Allow frontend origins - add production URL from environment
 allowed_origins = [
 	"http://127.0.0.1:5500",
 	"http://localhost:5500",
 	"null",  # file:// origin in some browsers
 ]
-CORS(app, supports_credentials=True, origins=allowed_origins)
+# Add production origin if set
+production_origin = os.environ.get('FRONTEND_URL')
+if production_origin:
+	allowed_origins.append(production_origin)
+# Allow all origins in production if needed (less secure but flexible)
+if os.environ.get('CORS_ALLOW_ALL') == 'true':
+	CORS(app, supports_credentials=True)
+else:
+	CORS(app, supports_credentials=True, origins=allowed_origins)
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -1257,4 +1269,7 @@ if __name__ == '__main__':
     print("🚀 Starting Fake News Detection App...")
     print("🌐 Frontend will be available at: http://localhost:5000")
     print("📝 Press Ctrl+C to stop the server")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use environment variable for port (required by hosting platforms)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    app.run(debug=debug, host='0.0.0.0', port=port)
