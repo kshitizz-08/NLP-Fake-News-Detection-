@@ -26,49 +26,52 @@ env/
 ENV/
 .venv
 
+# Flask
+instance/
+.webassets-cache
+*.db
+*.sqlite
+*.sqlite3
+
+# Machine Learning Models (large files - consider Git LFS)
+*.pkl
+*.h5
+*.hdf5
+*.joblib
+*.model
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.DS_Store
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
-instance/
-
-# Model files (if too large, consider using Git LFS)
-# Allow model files in backend directory (required for app)
-!backend/*.pkl
-*.pkl
-*.h5
-*.model
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
 
 # Environment variables
 .env
 .env.local
+.env.*.local
 
 # Logs
 *.log
 logs/
 
 # OS
-.DS_Store
 Thumbs.db
-desktop.ini
+.DS_Store
 
-# Flask
+# Project specific
+backend/instance/
 instance/
-.webassets-cache
+*.db
+backend/metrics.json
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# Metrics and temporary files
-metrics.json
+# Keep data directory structure but ignore large CSV files if needed
+# Uncomment if data files are too large:
+# data/*.csv
 
