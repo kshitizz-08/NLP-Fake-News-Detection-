@@ -17,15 +17,22 @@ sys.path.insert(0, backend_dir)
 os.chdir(backend_dir)
 
 # Now import the Flask app (this will work because we're in backend directory)
-from app import app
+try:
+    from app import app, db
+    print("✅ Flask app imported successfully")
+except Exception as e:
+    print(f"❌ Error importing app: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
 
 # Initialize database tables if needed
 with app.app_context():
     try:
-        # Import db from app module
-        from app import db
         db.create_all()
+        print("✅ Database tables initialized")
     except Exception as e:
+        print(f"⚠️ Database initialization note: {e}")
         # Database initialization is optional - app.py handles it
         pass
 
