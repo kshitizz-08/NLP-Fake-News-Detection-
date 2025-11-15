@@ -28,12 +28,23 @@ except Exception:  # Optional at runtime if user doesn't pass URLs
 app = Flask(__name__)
 
 # Configuration from environment variables (for production) or defaults (for development)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+# Generate a secret key if not set (less secure but allows app to run)
+secret_key = os.environ.get('SECRET_KEY')
+if not secret_key or secret_key == 'your-secret-key-change-this-in-production':
+    import secrets
+    secret_key = secrets.token_hex(32)
+    print("⚠️ WARNING: SECRET_KEY not set! Generated temporary key. Set SECRET_KEY environment variable for production!")
+app.config['SECRET_KEY'] = secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # JWT Configuration
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-jwt-secret-key-change-this-in-production')
+jwt_secret_key = os.environ.get('JWT_SECRET_KEY')
+if not jwt_secret_key or jwt_secret_key == 'your-jwt-secret-key-change-this-in-production':
+    import secrets
+    jwt_secret_key = secrets.token_hex(32)
+    print("⚠️ WARNING: JWT_SECRET_KEY not set! Generated temporary key. Set JWT_SECRET_KEY environment variable for production!")
+app.config['JWT_SECRET_KEY'] = jwt_secret_key
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)  # 30 days
 
 # Extended session configuration to prevent premature expiration
